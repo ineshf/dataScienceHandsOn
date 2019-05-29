@@ -1,8 +1,13 @@
 function(input, output, session) {
-  
-  # Combine the selected variables into a new data frame
+  data<-read.csv("/home/ines/platzi/dataLimpia.csv")
+  data<-data[,-(1:2)]
+  # Combinar los datos seleccionados para un nuevo conjunto
   selectedData <- reactive({
-    iris[, c(input$xcol, input$ycol)]
+    #data<-read.csv("/home/ines/platzi/dataLimpia.csv")
+    #data[, c(input$xcol, input$ycol)]
+    data<-read.csv("/home/ines/platzi/dataLimpia.csv")
+    data<-data[,-(1:2)]
+    data[, c(input$xcol, input$ycol)]
   })
   
   clusters <- reactive({

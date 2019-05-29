@@ -23,7 +23,7 @@ pag1 <-html_attr(paginacion,"href")
 pag1
 #[1] "//s?k=aspirador&page=2&__mk_es_ES=%C3%85M%C3%85%C5%BD%C3%95%C3%91&qid=1558605934&ref=sr_pg_2"
 # Probar a sustituir 2 por 3!
-lista_paginas<-c(1:5)
+lista_paginas<-c(1:10)
 pag<-str_replace(pag1, "page=2",paste0("page=",lista_paginas))
 pag<-str_replace(pag, "sr_pg_2",paste0("sr_pg_",lista_paginas))
 
@@ -48,7 +48,7 @@ test
 
 #Obtenemos todos los linkns de 5 paginas 
 linksAsp<-sapply(paginastotales, dameLinksPagina)
-vlinkAsp<-paste0("https://www.amazon.es",as.vector(res))
+vlinkAsp<-paste0("https://www.amazon.es",as.vector(linksAsp))
 
 
 ###################
@@ -138,17 +138,16 @@ getArticulo<-function(url){
   if( length(tabla)==0 ){
     col<-c("Peso del producto","Dimensiones del producto","Capacidad","Potencia")
     mitab<-data.frame(colnames(col))
-    mitab<-rbind(mitab, c("0","0","0","0"))
+    mitab<-rbind(mitab, c("-1","-1","-1","-1"))
+    #mitab<-rbind(mitab, c("-1","-1","-1","-1"))
+    
     colnames(mitab)<-col
-    # class(tabla)
-    # tab<-t(tabla[[1]])
-    # colnames(tab[1,])
-    # mitab<-data.frame(t(tab[2,-14]))
-    # colnames(mitab)<-tab[1,-14]
+   
   }else{
     col<-c("Peso del producto","Dimensiones del producto","Capacidad","Potencia")
     colnames(mitab)<-col
     mitab<-rbind(mitab, c("0","0","0","0"))
+    mitab<-rbind(mitab, c("-1","-1","-1","-1"))
     # colnames(mitab)<-col
     a<-do.call("rbind", tabla) #Convertimos a matrix e invertimos
     tablaconv<-t(a)
@@ -160,12 +159,12 @@ getArticulo<-function(url){
     dimensiones<- as.character(tabldf$`Dimensiones del producto`[1])
     capacidad<- as.character(tabldf$Capacidad[1])
     potencia<- as.character(tabldf$Potencia[1])
-    if(length(peso)==0) peso<-"0"
-    if(length(dimensiones)==0) dimensiones<-"0"
-    if(length(capacidad)==0) capacidad<-"0"
-    if(length(potencia)==0) potencia<-"0"
+    if(length(peso)==0) peso<-"-1"
+    if(length(dimensiones)==0) dimensiones<-"-1"
+    if(length(capacidad)==0) capacidad<-"-1"
+    if(length(potencia)==0) potencia<-"-1"
     #Creamos dataframes de 0 y luego sustituimos valores
-    zero<-matrix("0", ncol=4, nrow=1)
+    zero<-matrix("-1", ncol=4, nrow=1)
     dfzero<-data.frame(zero)
     colnames(dfzero)<-col
     #Convertimos todo a character
@@ -207,8 +206,9 @@ res<-sapply(vlinkAsp,getArticulo)
 #Generamos un dataframe con esa info
 a<-do.call("rbind", res)
 aspiradoras<-as.data.frame(a)
-colnames(a)<-c("nombre", "peso" , "dimensiones", "capacidad","potencia", "opiniones", "precio")  
-write.csv(a, "/home/ines/platzi/dataAmazon.csv")
+colnames(aspiradoras)<-c("nombre", "peso" , "dimensiones", "capacidad","potencia", "opiniones", "precio")  
+rownames(aspiradoras)<-c(1:200)
+write.csv(aspiradoras, "/home/ines/platzi/dataAmazon2.csv")
 
 
 

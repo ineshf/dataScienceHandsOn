@@ -11,13 +11,13 @@ plot(1:12, wss, type="b", xlab="Number of Clusters",
 
 set.seed(20)
 
-mydataCluster <- kmeans(dat, 4, nstart =15 , iter.max = 30)
+mydataCluster <- kmeans(data, 7, nstart =15 , iter.max = 30)
 mydataCluster
 
 #Coste de error total!
 mydataCluster$tot.withinss
 
-par(mfrow=c(2,2))
+#par(mfrow=c(2,4))
 
 # Create data: Cluster 1
 data=as.data.frame(t(mydataCluster$centers[1,]))
